@@ -64,7 +64,7 @@
   @media(max-width:820px){.nav .links a:not(.navbuy){display:none;}}
 
   /* hero */
-  .intro{position:relative;height:210vh;background:var(--dark2);}
+  .intro{position:relative;height:165vh;background:var(--dark2);}
   .intro-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;
     align-items:center;justify-content:center;text-align:center;padding:0 20px;}
   .glow{position:absolute;inset:0;background:
@@ -79,14 +79,26 @@
   .lines{position:relative;height:2.4em;margin-top:52px;width:100%;max-width:820px;}
   .intro-line{position:absolute;left:0;right:0;font-family:var(--serif);font-weight:400;
     font-size:clamp(2.1rem,5.2vw,3.5rem);color:var(--cream);opacity:0;transform:translateY(16px);
-    transition:opacity .9s var(--ease),transform .9s var(--ease);line-height:1.1;}
+    transition:opacity .55s var(--ease),transform .55s var(--ease);line-height:1.1;}
   .intro-line.active{opacity:.96;transform:none;}
-  .cue{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;
-    align-items:center;gap:10px;color:var(--gold);font-family:var(--sans);font-size:.66rem;letter-spacing:.24em;
-    text-transform:uppercase;opacity:.8;}
-  .cue i{width:1px;height:36px;background:linear-gradient(var(--gold),transparent);animation:pulse 2.2s var(--ease) infinite;}
-  @keyframes pulse{0%,100%{opacity:.3;transform:scaleY(.6);}50%{opacity:1;transform:scaleY(1);}}
+  .cue{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;
+    align-items:center;gap:8px;color:var(--gold);font-family:var(--sans);font-weight:600;font-size:.8rem;letter-spacing:.28em;
+    text-transform:uppercase;opacity:0;animation:cuein .8s 1.2s var(--ease) forwards;transition:opacity .4s;}
+  .cue svg{width:26px;height:26px;animation:bob 1.6s ease-in-out infinite;}
+  .cue.gone{opacity:0!important;animation:none;pointer-events:none;}
+  @keyframes cuein{to{opacity:1;}}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:.55;}50%{transform:translateY(9px);opacity:1;}}
 
+  .talk{display:flex;align-items:center;gap:20px;max-width:640px;margin:0 auto 28px;padding:22px;border-radius:18px;background:var(--aubergine);border:1px solid rgba(217,165,33,.35);text-align:left;}
+  .talk[hidden]{display:none;}
+  .talk-play{flex:none;width:64px;height:64px;border-radius:50%;background:var(--gold);color:var(--dark2);display:grid;place-items:center;transition:transform .2s;}
+  .talk-play:hover{transform:scale(1.07);} .talk-play svg{width:28px;height:28px;margin-left:3px;}
+  .talk-txt{min-width:0;flex:1;} .talk-txt small{display:block;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;font-size:.72rem;font-weight:600;}
+  .talk-txt b{display:block;font-family:var(--serif);font-weight:400;font-size:1.5rem;color:var(--cream);margin:4px 0 6px;line-height:1.15;}
+  .talk-txt audio{width:100%;margin-top:6px;}
+  .speak-btn{display:inline-flex;align-items:center;gap:14px;padding:18px 30px;border-radius:999px;background:linear-gradient(135deg,#E8B93A,var(--gold) 55%,var(--gold-deep));color:var(--dark2);font-family:var(--serif);font-size:1.45rem;text-decoration:none;box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 14px 40px rgba(217,165,33,.35);transition:transform .25s var(--ease),box-shadow .25s var(--ease);}
+  .speak-btn svg{width:24px;height:24px;} .speak-btn i{font-style:normal;transition:transform .25s var(--ease);}
+  .speak-btn:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(255,255,255,.3) inset,0 20px 55px rgba(217,165,33,.55);} .speak-btn:hover i{transform:translateX(6px);}
   .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
   .reveal.in{opacity:1;transform:none;}
 
@@ -358,7 +370,7 @@
    While this is empty, the popup and the locked chapters stay OFF, so nobody is
    locked out or shown a form that doesn't work.
    =========================================================================== */
-window.GROOVE_CFG = { mlAction: window.__ML || '' };
+window.GROOVE_CFG = { mlAction: window.__ML || '', talkUrl: '', talkTitle: 'Camera On: Complex PTSD, the Camera, and the Art of Hiding in Plain Sight', talkMeta: 'Audio · Alphabet Mental Health Conference' }; /* talkUrl: paste an mp3 or page link to show the audio card in Come say hello */
 (function(){
   var q = location.search, root = document.documentElement;
   try{ if(/[?&]reset=1/.test(q)){ localStorage.removeItem('groove_unlocked'); localStorage.removeItem('groove_sub_seen'); } }catch(e){}
@@ -388,7 +400,7 @@ window.GROOVE_CFG = { mlAction: window.__ML || '' };
       <p class="intro-line" data-line="0">There's a reason you came.</p>
       <p class="intro-line" data-line="1">Stay a while.</p>
     </div>
-    <div class="cue">Scroll<i></i></div>
+    <div class="cue" id="cue">Scroll<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg></div>
   </div>
 </header>
 
@@ -505,7 +517,10 @@ window.GROOVE_CFG = { mlAction: window.__ML || '' };
         <a class="link" href="https://podcasts.apple.com/us/podcast/the-niche-is-you/id1645205346" target="_blank" rel="noopener">The Niche Is You</a><br><br>
         <a class="link" href="https://www.sarahblondin.com/" target="_blank" rel="noopener">Meditations · Sarah Blondin</a></div>
       <div class="card c2"><h3>For your eyes</h3><p>Images and visual stories that hold light and honesty at once.</p>
-        <a class="link" href="https://linktr.ee/Cracksinthekingdom" target="_blank" rel="noopener">Cracks in the Kingdom</a></div>
+        <div class="shop" style="margin-top:0;margin-bottom:14px;"><a class="link" href="https://youtu.be/WJTs9ptwL0I" target="_blank" rel="noopener">The Only Girl in the Room</a><span>On YouTube &middot; latest episode: Life Be Lifing</span></div>
+        <a class="link" href="https://linktr.ee/Cracksinthekingdom" target="_blank" rel="noopener">Cracks in the Kingdom</a>
+        <div class="shop"><a class="link" href="https://milkweed.org/book/braiding-sweetgrass" target="_blank" rel="noopener">Braiding Sweetgrass</a><span>Robin Wall Kimmerer</span></div>
+        <div class="shop"><a class="link" href="https://adriennemareebrown.net/book/emergent-strategy/" target="_blank" rel="noopener">Emergent Strategy</a><span>adrienne maree brown</span></div></div>
       <div class="card c3"><h3>For your hands</h3><p>Journals and notebooks for the days you need to write it out.</p>
         <div class="shop"><a class="link" href="https://www.holstee.com/collections/for-your-desk" target="_blank" rel="noopener">Holstee</a><span>For deeper personal work</span></div>
         <div class="shop"><a class="link" href="https://berootedco.com/collections/journals" target="_blank" rel="noopener">Be Rooted</a><span>Black woman-owned</span></div>
@@ -529,8 +544,8 @@ window.GROOVE_CFG = { mlAction: window.__ML || '' };
     <div class="rule"></div>
     <p class="lede">Rated it, wrecked by it, or somewhere in between? Leave a review where readers gather.</p>
     <div class="buy-row">
-      <a class="btn btn-ghost swap" href="https://www.goodreads.com" target="_blank" rel="noopener" data-swap="goodreads">Review on Goodreads</a>
-      <a class="btn btn-ghost swap" href="https://www.thestorygraph.com" target="_blank" rel="noopener" data-swap="storygraph">Review on The StoryGraph</a>
+      <a class="btn btn-ghost" href="https://www.goodreads.com/book/show/259234957-groove" target="_blank" rel="noopener">Review on Goodreads</a>
+      <a class="btn btn-ghost" href="https://app.thestorygraph.com/browse?search_term=9780999575123" target="_blank" rel="noopener">Review on The StoryGraph</a>
     </div>
   </div>
 </section>
@@ -567,8 +582,13 @@ window.GROOVE_CFG = { mlAction: window.__ML || '' };
   <div class="wrap reveal">
     <h2>Come say hello.</h2>
     <div class="rule"></div>
-    <div class="event"><span class="date">08<small>Oct</small></span><span><b>Alphabet Mental Health Conference</b><span style="opacity:.8;">Speaking · [Venue / City] · details to come</span></span></div>
-    <div class="event swap" data-swap="next-event"><span class="date">—</span><span><b>Your next date</b><span style="opacity:.8;">Add readings, festivals, and talks as they confirm.</span></span></div>
+    <p class="lede" style="margin-bottom:28px;">Adrienne speaks on mental health, complex PTSD, and the courage to be seen. Recent stage: the Alphabet Mental Health Conference, where <em>Camera On: Complex PTSD, the Camera, and the Art of Hiding in Plain Sight</em> drew more than 100 attendees.</p>
+    <div class="talk" id="talkCard" hidden>
+      <a class="talk-play" id="talkPlay" href="#" target="_blank" rel="noopener" aria-label="Play the talk"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></a>
+      <div class="talk-txt"><small id="talkMeta"></small><b id="talkTitle"></b><audio id="talkAudio" controls preload="none" hidden></audio></div>
+    </div>
+    <div class="event"><span class="date">—</span><span><b>To be updated as&hellip;</b><span style="opacity:.8;">readings, festivals, and talks confirm.</span></span></div>
+    <p style="text-align:center;margin-top:30px;"><a class="speak-btn" href="mailto:info@findingmygroove.com?subject=Speaking%20inquiry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span>Invite Adrienne to speak</span><i>&rarr;</i></a></p>
   </div>
 </section>
 
@@ -608,9 +628,11 @@ window.GROOVE_CFG = { mlAction: window.__ML || '' };
 <footer>
   <div class="fbig">groove</div>
   <div class="socials">
-    <a href="https://www.instagram.com/readgroove/" target="_blank" rel="noopener">Instagram</a>
-    <a class="swap" href="https://www.goodreads.com" target="_blank" rel="noopener" data-swap="goodreads">Goodreads</a>
-    <a class="swap" href="https://www.thestorygraph.com" target="_blank" rel="noopener" data-swap="storygraph">StoryGraph</a>
+    <a href="https://www.instagram.com/readgroove/" target="_blank" rel="noopener">Instagram @readgroove</a>
+    <a href="https://www.instagram.com/inthecache/" target="_blank" rel="noopener">Instagram @inthecache</a>
+    <a href="https://www.tiktok.com/@inthecache" target="_blank" rel="noopener">TikTok @inthecache</a>
+    <a href="https://www.goodreads.com/book/show/259234957-groove" target="_blank" rel="noopener">Goodreads</a>
+    <a href="https://app.thestorygraph.com/browse?search_term=9780999575123" target="_blank" rel="noopener">StoryGraph</a>
     <a href="https://findingmygroove.substack.com" target="_blank" rel="noopener">Substack</a>
   </div>
   <small>© 2026 Adrienne Ford · Groove · Illustrations by Hendrik Gericke</small>
@@ -757,10 +779,15 @@ window.GROOVE_CFG = { mlAction: window.__ML || '' };
     var p=Math.min(1,Math.max(0,st/(intro.offsetHeight-window.innerHeight)));
     var lines=document.querySelectorAll('.intro-line');
     lines.forEach(function(l){l.classList.remove('active');});
-    if(p<0.5){lines[0].classList.add('active');}else{lines[1].classList.add('active');}
+    if(p<0.22){lines[0].classList.add('active');}else{lines[1].classList.add('active');}
+    document.getElementById('cue').classList.toggle('gone',st>40);
     document.querySelector('.hero-cover').style.transform='scale('+(1-p*0.1)+') translateY('+(p*-14)+'px)';
   });
   document.querySelector('.intro-line').classList.add('active');
+  (function(){var G=window.GROOVE_CFG||{};if(!G.talkUrl)return;var c=document.getElementById('talkCard'),a=document.getElementById('talkAudio'),pl=document.getElementById('talkPlay');
+    document.getElementById('talkTitle').textContent=G.talkTitle;document.getElementById('talkMeta').textContent=G.talkMeta;c.hidden=false;
+    if(/\.(mp3|m4a|wav|ogg)(\?|$)/i.test(G.talkUrl)){a.src=G.talkUrl;a.hidden=false;pl.addEventListener('click',function(e){e.preventDefault();a.paused?a.play():a.pause();});}
+    else{pl.href=G.talkUrl;}})();
 
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:0.12});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
